@@ -80,10 +80,7 @@ function Header() {
                                         onMouseLeave={() => {
                                             setTimeout(() => {
                                                 console.log("subHeader Hover while leaving hover", subHeaderHover)
-                                                // if(!subHeaderHover) {
                                                 setHover(0)
-                                                    // setSubHeaderData({})
-                                                // }
                                             }, 1000)
                                         }}
                                     >{header.title}</Nav.Link>
@@ -104,16 +101,10 @@ function Header() {
                         }}
                         onMouseEnter={() => {
                             setSubHeaderHover(true)
-                            // if(hover){
-                            //     console.log(subHeaderHover)
-                            //     console.log('hover', hover)
-                            // }
                         }} 
 
                         onMouseLeave={() => {
                             setSubHeaderHover(false);
-                            // setTimeout(() => {
-                            // }, 1000)
                         }}
                     >
                         <Container >
@@ -136,7 +127,6 @@ function Header() {
                                 </Col>
                             </Row>
                         </Container>
-
                     </div>
                 </>
             )}
