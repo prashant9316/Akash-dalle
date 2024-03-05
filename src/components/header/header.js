@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Container, Nav, NavDropdown, Navbar, Row } from 'react-bootstrap';
 import SubHeader from './sub-header';
 
@@ -39,8 +39,26 @@ const headerData = [
 
 function Header() {
     const [hover, setHover] = useState(0);
-    const [subHeaderData, setSubHeaderData] = useState({})
-    const [dataToShow, setDataToShow] = useState("")
+    const [subHeaderData, setSubHeaderData] = useState({});
+    const [dataToShow, setDataToShow] = useState("");
+    const [subHeaderHover, setSubHeaderHover] = useState(false);
+    const [showSubHeader, setShowSubHeader] = useState(false);
+
+
+    useEffect(() =>{
+        if(subHeaderData == false && hover != 0){
+            setShowSubHeader(true)
+        }
+        setTimeout(() => {
+            if(subHeaderHover == false && hover == 0){
+                setShowSubHeader(false)
+            } else if(subHeaderHover == true && hover != 0){
+                setShowSubHeader(true)
+            } else { // sub header hover is true and hover is also true
+                setShowSubHeader(true);
+            }
+        }, 500)
+    }, [subHeaderHover, hover])
     return (
         <>
             <Navbar bg="dark" variant="dark" expand="lg">
@@ -60,39 +78,42 @@ function Header() {
                                             }
                                         }}
                                         onMouseLeave={() => {
-                                            setHover(0)
-                                            setSubHeaderData({})
+                                            setTimeout(() => {
+                                                console.log("subHeader Hover while leaving hover", subHeaderHover)
+                                                // if(!subHeaderHover) {
+                                                setHover(0)
+                                                    // setSubHeaderData({})
+                                                // }
+                                            }, 1000)
                                         }}
                                     >{header.title}</Nav.Link>
                                 )
                             })}
 
-                            {/* <Nav.Link href="#link"
-                        onMouseEnter={() => {setHover(2)}}
-                        onMouseLeave={() => setHover(0)}
-                    >Link</Nav.Link>
-                    <Nav.Link href="#hover"
-                        onMouseEnter={() => {setHover(3)}}
-                        onMouseLeave={() => setHover(0)}
-                    >Hover</Nav.Link> */}
-
-                            {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                        <NavDropdown.Item href='#action/3.1'>
-                            <SubHeader />
-                        </NavDropdown.Item>
-                    </NavDropdown> */}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
 
-            {hover != 0 && (
+            {showSubHeader && (
                 <>
-                    <div className='w-100 absolute z-100 top-0 left-0 h-25 bg-secondary' 
+                    <div className='w-100 absolute z-100 top-0 left-0' 
+                        style={{
+                            height: '200px',
+                            backgroundColor: "#1E2222"
+                        }}
                         onMouseEnter={() => {
-                            if(hover){
-                                setHover(hover);
-                            }
+                            setSubHeaderHover(true)
+                            // if(hover){
+                            //     console.log(subHeaderHover)
+                            //     console.log('hover', hover)
+                            // }
+                        }} 
+
+                        onMouseLeave={() => {
+                            setSubHeaderHover(false);
+                            // setTimeout(() => {
+                            // }, 1000)
                         }}
                     >
                         <Container >
@@ -103,13 +124,15 @@ function Header() {
                                             <div key={data.id} className='w-25 h-100 float-left' onMouseEnter={() => {
                                                 setDataToShow(data.data)
                                             }}>
-                                                <a href={data.link}>{data.title}</a>
+                                                <h6 className='text-white'>{data.title}</h6>
                                             </div>
                                         )
                                     })}
                                 </Col>
                                 <Col>
-                                    {dataToShow ? dataToShow : subHeaderData.columnData[0].data}
+                                    <p className='text-white'>
+                                        {dataToShow ? dataToShow : subHeaderData.columnData[0].data}
+                                    </p>
                                 </Col>
                             </Row>
                         </Container>
